@@ -187,9 +187,9 @@
             color: var(--text-dim);
         }
 
-        /* Match header columns to actual input widths */
-        .device-input-header .col-name  { flex: 1; min-width: 0; }
-        .device-input-header .col-num   { flex: 0 0 70px; width: 70px; }
+        /* Match header columns to actual input proportions */
+        .device-input-header .col-name   { flex: 3; min-width: 0; }
+        .device-input-header .col-num    { flex: 1; min-width: 0; max-width: 90px; }
         .device-input-header .col-remove { flex: none; width: 36px; }
 
         #deviceInputs {
@@ -217,17 +217,15 @@
         }
 
         .device-input .device-name {
-            flex: 1;
+            flex: 3;
             min-width: 0;
         }
 
         .device-input .device-power,
         .device-input .device-hours {
-            flex: 0 0 70px;
-            width: 70px;
+            flex: 1;
             min-width: 0;
-            padding-left: 8px;
-            padding-right: 4px;
+            max-width: 90px;
         }
 
         .device-input input:focus {
@@ -492,13 +490,6 @@
             #deviceInputs { gap: 6px; }
 
             .device-input { gap: 6px; }
-
-            .device-input .device-power,
-            .device-input .device-hours {
-                flex: 0 0 58px;
-                width: 58px;
-                font-size: 0.875rem;
-            }
 
             .remove-device {
                 width: 30px;
