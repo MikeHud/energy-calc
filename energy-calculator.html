@@ -230,6 +230,7 @@
         .device-input .device-hours {
             flex: 0 0 70px;
             width: 70px;
+            min-width: 0;
             padding-left: 8px;
             padding-right: 4px;
         }
@@ -483,6 +484,25 @@
             .container { padding: 20px 14px 32px; }
 
             .calc-header h1 { font-size: 1.9rem; }
+
+            .devices-card { padding: 10px; }
+
+            #deviceInputs { gap: 6px; }
+
+            .device-input { gap: 6px; }
+
+            .device-input .device-power,
+            .device-input .device-hours {
+                flex: 0 0 58px;
+                width: 58px;
+                font-size: 0.875rem;
+            }
+
+            .remove-device {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
 
             .results-container { grid-template-columns: 1fr; }
 
