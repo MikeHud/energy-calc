@@ -3,384 +3,527 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campervan Energy Usage Calculator</title>
+    <title>Van Energy Calculator · VandogTraveller</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg:           #0f1114;
+            --surface:      #181b20;
+            --surface-2:    #1f242b;
+            --surface-3:    #272e37;
+            --border:       #272e37;
+            --border-hover: #38424f;
+            --text:         #dde2ea;
+            --text-muted:   #6b7685;
+            --text-dim:     #3d4856;
+            --amber:        #f59e0b;
+            --amber-light:  #fbbf24;
+            --amber-dim:    rgba(245,158,11,0.08);
+            --amber-glow:   rgba(245,158,11,0.18);
+            --green:        #10b981;
+            --green-dim:    rgba(16,185,129,0.08);
+            --red:          #f87171;
+            --red-dim:      rgba(248,113,113,0.08);
+            --radius:       7px;
+            --radius-lg:    12px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    margin: 0;
-    padding: 20px;
-    color: #333;
-}
+            font-family: 'Barlow', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            padding: 32px 16px 48px;
+            min-height: 100vh;
+        }
 
-.container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+        }
 
-h1 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 20px;
-}
+        /* ── Header ───────────────────────── */
+        .calc-header {
+            margin-bottom: 36px;
+        }
 
-.device-input-header {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 6px;
-    padding: 0 2px;
-}
+        .calc-header h1 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            line-height: 1.05;
+            color: var(--text);
+        }
 
-.device-input-header span {
-    flex: 1;
-    font-size: 0.75em;
-    font-weight: 600;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
+        .calc-header h1 em {
+            font-style: normal;
+            color: var(--amber);
+        }
 
-.device-input-header span:last-child {
-    flex: none;
-    width: 39px;
-}
+        .calc-header p {
+            margin-top: 8px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            max-width: 460px;
+        }
 
-.device-input {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    align-items: center;
-}
+        /* ── Section label ────────────────── */
+        .section-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
 
-.device-input input {
-    flex-grow: 1; /* Ensure all input fields grow equally */
-}
+        /* ── Card shell ───────────────────── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            margin-bottom: 10px;
+        }
 
-input, button {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-}
+        /* ── Quick Add ────────────────────── */
+        .preset-row {
+            display: flex;
+            gap: 8px;
+        }
 
-input {
-    flex: 1;
-}
+        .preset-row select {
+            flex: 1;
+            appearance: none;
+            background: var(--surface-2);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7685' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 36px 10px 12px;
+            border-radius: var(--radius);
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
 
-button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .preset-row select:focus {
+            outline: none;
+            border-color: var(--amber);
+        }
 
-button:hover {
-    background-color: #2980b9;
-}
+        .preset-row select option {
+            background: var(--surface-2);
+            color: var(--text);
+        }
 
-.remove-device {
-    background-color: #fff;
-    border: solid 1px #e74c3c;
-    color: #888;
-    padding: 10px;  
-    width: 39px;    
-    height: 39px;
-    display: flex;  
-    justify-content: center;  
-    align-items: center;
-}
+        #addPreset {
+            background: var(--amber);
+            color: #100900;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: background 0.15s, transform 0.1s;
+        }
 
-.remove-device:hover {
-    background-color: #c0392b;
-    color: white;
-}
+        #addPreset:hover  { background: var(--amber-light); transform: translateY(-1px); }
+        #addPreset:active { transform: translateY(0); }
 
-#addDevice {
-    margin: auto;
-    display: block;
-    width: 100%;
-    padding: 12px 20px;
-}
+        /* ── Device list ──────────────────── */
+        .devices-card {
+            margin-bottom: 10px;
+        }
 
-.results-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-top: 30px;
-}
+        .device-input-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding: 0 2px;
+        }
 
-.result-box {
-    padding: 25px;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-}
+        .device-input-header span {
+            flex: 1;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
 
-.result-box h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #2c3e50;
-}
+        .device-input-header span:last-child {
+            flex: none;
+            width: 36px;
+        }
 
-.result-box-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    
-}
+        #deviceInputs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
 
-#result {
-    grid-column: 1 / -1;
-    background-color: #ecf0f1;
-}
+        .device-input {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
 
-#solarSuggestion {
-    background-color: #e8f6f3;
-}
+        .device-input input {
+            flex: 1;
+            width: 0;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 9px 11px;
+            border-radius: var(--radius);
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.875rem;
+            transition: border-color 0.15s, background 0.15s;
+        }
 
-#batteryRecommendation {
-    background-color: #f0e8f6;
-}
+        .device-input input:focus {
+            outline: none;
+            border-color: var(--amber);
+            background: var(--surface-3);
+        }
 
-.container .no-info {
-    color: #888;
-    font-style: italic;
-}
+        .device-input input::placeholder { color: var(--text-dim); }
 
-.assumption {
-    font-size: 0.8em;
-    color: #666;
-    margin-top: 5px;
-}
+        .device-input input[type="number"]::-webkit-inner-spin-button,
+        .device-input input[type="number"]::-webkit-outer-spin-button { opacity: 0.25; }
 
-.breakdown-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 14px;
-    font-size: 0.82em;
-    text-align: left;
-}
+        .remove-device {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            border-radius: var(--radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            line-height: 1;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+            font-family: sans-serif;
+        }
 
-.breakdown-table th {
-    color: #999;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    font-size: 0.85em;
-    padding: 4px 6px;
-    border-bottom: 1px solid #ddd;
-}
+        .remove-device:hover {
+            background: var(--red-dim);
+            border-color: var(--red);
+            color: var(--red);
+        }
 
-.breakdown-table td {
-    padding: 5px 6px;
-    color: #555;
-    border-bottom: 1px solid #f0f0f0;
-}
+        #addDevice {
+            width: 100%;
+            padding: 9px;
+            background: transparent;
+            border: 1px dashed var(--border-hover);
+            color: var(--text-muted);
+            border-radius: var(--radius);
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: border-color 0.15s, color 0.15s, background 0.15s;
+        }
 
-.breakdown-table td:last-child,
-.breakdown-table th:last-child {
-    text-align: right;
-    font-weight: 600;
-    color: #333;
-}
+        #addDevice:hover {
+            border-color: var(--amber);
+            color: var(--amber);
+            background: var(--amber-dim);
+        }
 
-.breakdown-table tr:last-child td {
-    border-bottom: none;
-}
+        /* ── Battery Settings ─────────────── */
+        .battery-settings {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
 
+        .battery-type-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.battery-capacity-result, .solar-power-result {
-    font-size: 1.5em;
-    font-weight: bold;
-    padding: 10px 10px;
-}
+        .battery-type-selector > label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
 
-.copyright {
-    font-size: 0.8em; /* Smaller font size */
-    color: #aaa; /* Lighter color for discretion */
-    text-align: left; /* Center the text */
-    margin-top: 50px; /* Add some space above */
-    margin-bottom: -5px;
-}
+        .toggle-group {
+            display: flex;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            padding: 3px;
+            gap: 2px;
+        }
 
-.instructions {
-    text-align: center;
-    margin: auto;
-    font-size: 0.8em;
-    color: #aaa;
-    margin-bottom: 40px;
-    width: 80%;
-}
+        .toggle-group input[type="radio"] { display: none; }
 
-.preset-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
+        .toggle-group label.toggle-option {
+            padding: 6px 14px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            background: transparent;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.15s, color 0.15s;
+            white-space: nowrap;
+        }
 
-.preset-row select {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    background-color: #fff;
-    cursor: pointer;
-}
+        .toggle-group input[type="radio"]:checked + label.toggle-option {
+            background: var(--amber);
+            color: #100900;
+            font-weight: 600;
+        }
 
-#addPreset {
-    white-space: nowrap;
-    flex-shrink: 0;
-    width: auto;
-    padding: 10px 16px;
-}
+        /* ── Results ──────────────────────── */
+        .results-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
 
-@media (max-width: 600px) {
-    .preset-row {
-        flex-direction: column;
-    }
-    #addPreset {
-        width: 100%;
-    }
-}
+        .result-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
 
-.battery-settings {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 20px;
-    margin-top: 25px;
-    margin-bottom: 5px;
-}
+        /* coloured top rule on each card */
+        .result-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+        }
 
-.battery-type-selector {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+        #result              { grid-column: 1 / -1; }
+        #result::before      { background: linear-gradient(90deg, var(--amber), var(--amber-light) 60%, transparent); }
+        #solarSuggestion::before     { background: var(--amber); }
+        #batteryRecommendation::before { background: var(--green); }
 
-.battery-type-selector label {
-    font-size: 0.9em;
-    color: #555;
-    font-weight: 600;
-    white-space: nowrap;
-}
+        .result-box h3 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 14px;
+        }
 
-.toggle-group {
-    display: flex;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    overflow: hidden;
-}
+        .result-box-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
-.toggle-group input[type="radio"] {
-    display: none;
-}
+        #result .result-box-content {
+            align-items: flex-start;
+        }
 
-.toggle-group label.toggle-option {
-    padding: 8px 16px;
-    font-size: 0.85em;
-    font-weight: normal;
-    color: #666;
-    background: #fff;
-    cursor: pointer;
-    border-right: 1px solid #ddd;
-    transition: background-color 0.2s, color 0.2s;
-    white-space: nowrap;
-}
+        /* Total energy number */
+        #resultContent {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -0.01em;
+            line-height: 1;
+        }
 
-.toggle-group label.toggle-option:last-of-type {
-    border-right: none;
-}
+        .no-info {
+            color: var(--text-dim);
+            font-style: italic;
+            font-size: 0.85rem;
+        }
 
-.toggle-group input[type="radio"]:checked + label.toggle-option {
-    background-color: #3498db;
-    color: #fff;
-}
+        /* Solar / battery numbers */
+        .battery-capacity-result,
+        .solar-power-result {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
 
-/* Add this media query for mobile responsiveness */
-@media (max-width: 600px) {
-    .device-input-header {
-        display: none;
-    }
+        .solar-power-result     { color: var(--amber-light); }
+        .battery-capacity-result { color: var(--green); }
 
-    .device-input {
-        flex-direction: column; /* Stack inputs vertically */
-        align-items: stretch; /* Make inputs full width */
-    }
+        .assumption {
+            font-size: 0.73rem;
+            color: var(--text-dim);
+            text-align: center;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
 
-    .remove-device {
-        width: 100%; /* Make the remove button full width */
-        margin-top: 10px; /* Add space above the button */
-    }
+        /* ── Breakdown table ──────────────── */
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            text-align: left;
+        }
 
-    .results-container {
-        grid-template-columns: 1fr; /* Stack results vertically */
-    }
+        .breakdown-table th {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            padding: 0 0 8px;
+            border-bottom: 1px solid var(--border);
+        }
 
-    .result-box {
-        margin-bottom: 20px; /* Add space between result boxes */
-    }
+        .breakdown-table th:last-child { text-align: right; }
 
-    #addDevice {
-        width: 100%; /* Make the add device button full width */
-    }
-    .container {
-        padding: 10px;
-    }
-}
+        .breakdown-table td {
+            padding: 7px 0;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
 
+        .breakdown-table td:last-child {
+            text-align: right;
+            color: var(--text);
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .breakdown-table tr:last-child td { border-bottom: none; }
+
+        /* ── Footer ───────────────────────── */
+        .copyright {
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            margin-top: 28px;
+            text-align: center;
+        }
+
+        /* ── Mobile ───────────────────────── */
+        @media (max-width: 600px) {
+            body { padding: 20px 12px 40px; }
+
+            .calc-header h1 { font-size: 1.9rem; }
+
+            .device-input-header { display: none; }
+
+            .device-input { flex-wrap: wrap; }
+
+            .device-input .device-name {
+                flex: 100%;
+                width: 100%;
+            }
+
+            .device-input .device-power,
+            .device-input .device-hours { flex: 1; }
+
+            .remove-device { flex-shrink: 0; }
+
+            .results-container { grid-template-columns: 1fr; }
+
+            .preset-row { flex-direction: column; }
+            #addPreset  { width: 100%; }
+
+            .battery-settings { flex-direction: column; align-items: flex-start; }
+
+            .battery-capacity-result,
+            .solar-power-result { font-size: 2.4rem; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Campervan Energy Usage Calculator</h1>
-        <p class="instructions">Enter all your devices below to get your total daily energy usage and recommendations for solar power and battery capacity.</p>
-        <div class="preset-row">
-            <select id="presetSelect">
-                <option value="">-- Quick add a common device --</option>
-                <option value="12V Compressor Fridge|45">12V Compressor Fridge (45W)</option>
-                <option value="LED Strip Lighting|20">LED Strip Lighting (20W)</option>
-                <option value="Laptop|60">Laptop (60W)</option>
-                <option value="Smartphone Charger|12">Smartphone Charger (12W)</option>
-                <option value="Tablet Charger|18">Tablet Charger (18W)</option>
-                <option value="12V Water Pump|60">12V Water Pump (60W)</option>
-                <option value="Diesel Heater Fan|25">Diesel Heater Fan (25W)</option>
-                <option value="Ceiling Fan|35">Ceiling Fan (35W)</option>
-                <option value="TV / Monitor|40">TV / Monitor (40W)</option>
-                <option value="CPAP Machine|30">CPAP Machine (30W)</option>
-                <option value="Portable Speaker|10">Portable Speaker (10W)</option>
-                <option value="USB Charger Hub|10">USB Charger Hub (10W)</option>
-                <option value="Inverter (idle draw)|15">Inverter — idle draw (15W)</option>
-            </select>
-            <button id="addPreset">+ Add</button>
-        </div>
-        <div class="device-input-header">
-            <span>Device</span>
-            <span>Watts</span>
-            <span>Hrs / Day</span>
-            <span></span>
-        </div>
-        <div id="deviceInputs">
-            <div class="device-input">
-                <input type="text" placeholder="Device name" class="device-name">
-                <input type="number" placeholder="Power (Watts)" class="device-power">
-                <input type="number" placeholder="Hours per day" class="device-hours">
-                <button class="remove-device">X</button>
+
+        <header class="calc-header">
+            <h1>Van Energy <em>Calculator</em></h1>
+            <p>Add your devices to size your solar panels and battery bank for life on the road.</p>
+        </header>
+
+        <p class="section-label">Quick Add Device</p>
+        <div class="card">
+            <div class="preset-row">
+                <select id="presetSelect">
+                    <option value="">— Select a common device —</option>
+                    <option value="12V Compressor Fridge|45">12V Compressor Fridge (45W)</option>
+                    <option value="LED Strip Lighting|20">LED Strip Lighting (20W)</option>
+                    <option value="Laptop|60">Laptop (60W)</option>
+                    <option value="Smartphone Charger|12">Smartphone Charger (12W)</option>
+                    <option value="Tablet Charger|18">Tablet Charger (18W)</option>
+                    <option value="12V Water Pump|60">12V Water Pump (60W)</option>
+                    <option value="Diesel Heater Fan|25">Diesel Heater Fan (25W)</option>
+                    <option value="Ceiling Fan|35">Ceiling Fan (35W)</option>
+                    <option value="TV / Monitor|40">TV / Monitor (40W)</option>
+                    <option value="CPAP Machine|30">CPAP Machine (30W)</option>
+                    <option value="Portable Speaker|10">Portable Speaker (10W)</option>
+                    <option value="USB Charger Hub|10">USB Charger Hub (10W)</option>
+                    <option value="Inverter (idle draw)|15">Inverter — idle draw (15W)</option>
+                </select>
+                <button id="addPreset">+ Add</button>
             </div>
         </div>
-        <button id="addDevice">Add Device</button>
-        <div class="battery-settings">
+
+        <p class="section-label">Your Devices</p>
+        <div class="card devices-card">
+            <div class="device-input-header">
+                <span>Device</span>
+                <span>Watts</span>
+                <span>Hrs / Day</span>
+                <span></span>
+            </div>
+            <div id="deviceInputs">
+                <div class="device-input">
+                    <input type="text" placeholder="Device name" class="device-name">
+                    <input type="number" placeholder="Watts" class="device-power">
+                    <input type="number" placeholder="Hrs/day" class="device-hours">
+                    <button class="remove-device">×</button>
+                </div>
+            </div>
+            <button id="addDevice">+ Add Device</button>
+        </div>
+
+        <p class="section-label">Battery Settings</p>
+        <div class="card battery-settings">
             <div class="battery-type-selector">
                 <label>Battery type:</label>
                 <div class="toggle-group">
@@ -391,6 +534,8 @@ button:hover {
                 </div>
             </div>
         </div>
+
+        <p class="section-label">Results</p>
         <div class="results-container">
             <div id="result" class="result-box">
                 <h3>Total Daily Energy Usage</h3>
@@ -408,7 +553,9 @@ button:hover {
                 <div class="result-box-content"></div>
             </div>
         </div>
+
         <p class="copyright">&copy; <script>document.write(new Date().getFullYear());</script> Mike Hudson VandogTraveller.com. All rights reserved.</p>
+
     </div>
 
     <script>
@@ -444,9 +591,9 @@ button:hover {
                 newDevice.className = 'device-input';
                 newDevice.innerHTML = `
                     <input type="text" placeholder="Device name" class="device-name" value="${name}">
-                    <input type="number" placeholder="Power (Watts)" class="device-power" value="${watts}">
-                    <input type="number" placeholder="Hours per day" class="device-hours">
-                    <button class="remove-device">X</button>
+                    <input type="number" placeholder="Watts" class="device-power" value="${watts}">
+                    <input type="number" placeholder="Hrs/day" class="device-hours">
+                    <button class="remove-device">×</button>
                 `;
                 deviceInputs.appendChild(newDevice);
                 presetSelect.value = '';
@@ -459,9 +606,9 @@ button:hover {
                 newDevice.className = 'device-input';
                 newDevice.innerHTML = `
                     <input type="text" placeholder="Device name" class="device-name">
-                    <input type="number" placeholder="Power (Watts)" class="device-power">
-                    <input type="number" placeholder="Hours per day" class="device-hours">
-                    <button class="remove-device">X</button>
+                    <input type="number" placeholder="Watts" class="device-power">
+                    <input type="number" placeholder="Hrs/day" class="device-hours">
+                    <button class="remove-device">×</button>
                 `;
                 deviceInputs.appendChild(newDevice);
                 calculateTotalUsage();
@@ -477,7 +624,7 @@ button:hover {
             function calculateTotalUsage() {
                 let totalWattHours = 0;
                 const devices = document.querySelectorAll('.device-input');
-                
+
                 devices.forEach(device => {
                     const power = parseFloat(device.querySelector('.device-power').value) || 0;
                     const hours = parseFloat(device.querySelector('.device-hours').value) || 0;
@@ -500,7 +647,7 @@ button:hover {
                 });
 
                 if (totalWattHours > 0) {
-                    resultContent.textContent = `${totalWattHours.toFixed(0)}Wh (${ampHours.toFixed(1)}Ah at 12V)`;
+                    resultContent.textContent = `${totalWattHours.toFixed(0)}Wh  (${ampHours.toFixed(1)}Ah at 12V)`;
                     resultContent.classList.remove('no-info');
                     breakdownTable.innerHTML = `
                         <thead><tr><th>Device</th><th>Wh/day</th></tr></thead>
@@ -515,17 +662,18 @@ button:hover {
                 const batteryType = document.querySelector('input[name="batteryType"]:checked').value;
                 const dod = batteryType === 'lithium' ? 0.8 : 0.5;
                 const dodLabel = batteryType === 'lithium' ? '80%' : '50%';
+
                 if (totalWattHours > 0) {
                     const recommendedBatteryCapacity = Math.ceil(ampHours * 3 / dod);
                     batteryRecommendationDiv.querySelector('.result-box-content').innerHTML = `
                         <div class="battery-capacity-result">${recommendedBatteryCapacity}Ah</div>
-                        <span class="assumption">(3 days autonomy · ${dodLabel} depth of discharge)</span>
+                        <span class="assumption">3 days autonomy · ${dodLabel} depth of discharge</span>
                     `;
 
                     const recommendedSolarPower = Math.ceil((totalWattHours / 5) * 1.33);
                     solarSuggestionDiv.querySelector('.result-box-content').innerHTML = `
                         <div class="solar-power-result">${recommendedSolarPower}W</div>
-                        <span class="assumption">(Assuming 5 hours of peak sunlight per day)</span>
+                        <span class="assumption">5 hours peak sunlight per day</span>
                     `;
                 } else {
                     batteryRecommendationDiv.querySelector('.result-box-content').innerHTML = `
@@ -559,12 +707,10 @@ button:hover {
                 if (!raw) return;
                 try {
                     const state = JSON.parse(raw);
-                    // Restore battery type
                     if (state.batteryType) {
                         const radio = document.querySelector(`input[name="batteryType"][value="${state.batteryType}"]`);
                         if (radio) radio.checked = true;
                     }
-                    // Restore devices (replace the default blank row)
                     if (state.devices && state.devices.length > 0) {
                         deviceInputs.innerHTML = '';
                         state.devices.forEach(d => {
@@ -572,9 +718,9 @@ button:hover {
                             row.className = 'device-input';
                             row.innerHTML = `
                                 <input type="text" placeholder="Device name" class="device-name" value="${d.name}">
-                                <input type="number" placeholder="Power (Watts)" class="device-power" value="${d.power}">
-                                <input type="number" placeholder="Hours per day" class="device-hours" value="${d.hours}">
-                                <button class="remove-device">X</button>
+                                <input type="number" placeholder="Watts" class="device-power" value="${d.power}">
+                                <input type="number" placeholder="Hrs/day" class="device-hours" value="${d.hours}">
+                                <button class="remove-device">×</button>
                             `;
                             deviceInputs.appendChild(row);
                         });
