@@ -1,48 +1,24 @@
 :root {
-    --bg:           #0f1114;
-    --surface:      #181b20;
-    --surface-2:    #1f242b;
-    --surface-3:    #272e37;
-    --border:       #272e37;
-    --border-hover: #38424f;
-    --text:         #dde2ea;
-    --text-muted:   #6b7685;
-    --text-dim:     #3d4856;
-    --amber:        #f59e0b;
-    --amber-light:  #fbbf24;
-    --amber-dim:    rgba(245,158,11,0.08);
-    --amber-glow:   rgba(245,158,11,0.18);
-    --green:        #10b981;
-    --green-dim:    rgba(16,185,129,0.08);
-    --red:          #f87171;
-    --red-dim:      rgba(248,113,113,0.08);
-    --btn-text:     #100900;
+    --bg:           #f4f1ec;
+    --surface:      #ffffff;
+    --surface-2:    #f7f4ef;
+    --surface-3:    #ede9e2;
+    --border:       #e2ddd5;
+    --border-hover: #c9c2b8;
+    --text:         #1c1a17;
+    --text-muted:   #6b6560;
+    --text-dim:     #9a9086;
+    --amber:        #b45309;
+    --amber-light:  #d97706;
+    --amber-dim:    rgba(180,83,9,0.07);
+    --amber-glow:   rgba(180,83,9,0.14);
+    --green:        #047857;
+    --green-dim:    rgba(4,120,87,0.07);
+    --red:          #b91c1c;
+    --red-dim:      rgba(185,28,28,0.06);
+    --btn-text:     #ffffff;
     --radius:       7px;
     --radius-lg:    12px;
-}
-
-@media (prefers-color-scheme: light) {
-    :root {
-        --bg:           #f4f1ec;
-        --surface:      #ffffff;
-        --surface-2:    #f7f4ef;
-        --surface-3:    #ede9e2;
-        --border:       #e2ddd5;
-        --border-hover: #c9c2b8;
-        --text:         #1c1a17;
-        --text-muted:   #6b6560;
-        --text-dim:     #b5aca0;
-        --amber:        #b45309;
-        --amber-light:  #d97706;
-        --amber-dim:    rgba(180,83,9,0.07);
-        --amber-glow:   rgba(180,83,9,0.14);
-        --green:        #047857;
-        --green-dim:    rgba(4,120,87,0.07);
-        --red:          #b91c1c;
-        --red-dim:      rgba(185,28,28,0.06);
-        --btn-text:     #ffffff;
-        --text-dim:     #9a9086;
-    }
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -329,7 +305,7 @@ body { background: transparent; }
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--text-dim);
+    color: var(--text-muted);
     margin-bottom: 14px;
 }
 
