@@ -258,29 +258,6 @@ button:hover {
     white-space: nowrap;
 }
 
-.autonomy-selector {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.autonomy-selector label {
-    font-size: 0.9em;
-    color: #555;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.autonomy-selector select {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 0.85em;
-    color: #333;
-    background-color: #fff;
-    cursor: pointer;
-}
-
 .toggle-group {
     display: flex;
     border: 1px solid #ddd;

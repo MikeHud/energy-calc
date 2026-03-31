@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('input[name="batteryType"]').forEach(radio => {
         radio.addEventListener('change', calculateTotalUsage);
     });
-    document.getElementById('autonomyDays').addEventListener('change', calculateTotalUsage);
 
     const presetSelect = document.getElementById('presetSelect');
     document.getElementById('addPreset').addEventListener('click', () => {
@@ -81,11 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const batteryType = document.querySelector('input[name="batteryType"]:checked').value;
         const dod = batteryType === 'lithium' ? 0.8 : 0.5;
         const dodLabel = batteryType === 'lithium' ? '80%' : '50%';
-        const autonomyDays = parseInt(document.getElementById('autonomyDays').value);
-        const recommendedBatteryCapacity = Math.ceil(ampHours * autonomyDays / dod);
+        const recommendedBatteryCapacity = Math.ceil(ampHours * 3 / dod);
         batteryRecommendationDiv.querySelector('.result-box-content').innerHTML = `
             <div class="battery-capacity-result">${recommendedBatteryCapacity}Ah</div>
-            <span class="assumption">(${autonomyDays} day${autonomyDays > 1 ? 's' : ''} autonomy · ${dodLabel} depth of discharge)</span>
+            <span class="assumption">(3 days autonomy · ${dodLabel} depth of discharge)</span>
         `;
 
         // Calculate and display solar panel recommendation

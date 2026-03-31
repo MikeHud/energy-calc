@@ -269,29 +269,6 @@ button:hover {
     gap: 12px;
 }
 
-.autonomy-selector {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.autonomy-selector label {
-    font-size: 0.9em;
-    color: #555;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.autonomy-selector select {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 0.85em;
-    color: #333;
-    background-color: #fff;
-    cursor: pointer;
-}
-
 .battery-type-selector label {
     font-size: 0.9em;
     color: #555;
@@ -413,16 +390,6 @@ button:hover {
                     <label class="toggle-option" for="lithium">Lithium (80% DoD)</label>
                 </div>
             </div>
-            <div class="autonomy-selector">
-                <label for="autonomyDays">Days of autonomy:</label>
-                <select id="autonomyDays">
-                    <option value="1">1 day</option>
-                    <option value="2">2 days</option>
-                    <option value="3" selected>3 days</option>
-                    <option value="4">4 days</option>
-                    <option value="5">5 days</option>
-                </select>
-            </div>
         </div>
         <div class="results-container">
             <div id="result" class="result-box">
@@ -467,7 +434,6 @@ button:hover {
             document.querySelectorAll('input[name="batteryType"]').forEach(radio => {
                 radio.addEventListener('change', calculateTotalUsage);
             });
-            document.getElementById('autonomyDays').addEventListener('change', calculateTotalUsage);
 
             const presetSelect = document.getElementById('presetSelect');
             document.getElementById('addPreset').addEventListener('click', () => {
@@ -549,13 +515,11 @@ button:hover {
                 const batteryType = document.querySelector('input[name="batteryType"]:checked').value;
                 const dod = batteryType === 'lithium' ? 0.8 : 0.5;
                 const dodLabel = batteryType === 'lithium' ? '80%' : '50%';
-                const autonomyDays = parseInt(document.getElementById('autonomyDays').value);
-
                 if (totalWattHours > 0) {
-                    const recommendedBatteryCapacity = Math.ceil(ampHours * autonomyDays / dod);
+                    const recommendedBatteryCapacity = Math.ceil(ampHours * 3 / dod);
                     batteryRecommendationDiv.querySelector('.result-box-content').innerHTML = `
                         <div class="battery-capacity-result">${recommendedBatteryCapacity}Ah</div>
-                        <span class="assumption">(${autonomyDays} day${autonomyDays > 1 ? 's' : ''} autonomy · ${dodLabel} depth of discharge)</span>
+                        <span class="assumption">(3 days autonomy · ${dodLabel} depth of discharge)</span>
                     `;
 
                     const recommendedSolarPower = Math.ceil((totalWattHours / 5) * 1.33);
@@ -586,7 +550,6 @@ button:hover {
                 const state = {
                     devices,
                     batteryType: document.querySelector('input[name="batteryType"]:checked').value,
-                    autonomyDays: document.getElementById('autonomyDays').value,
                 };
                 localStorage.setItem('energyCalcState', JSON.stringify(state));
             }
@@ -600,10 +563,6 @@ button:hover {
                     if (state.batteryType) {
                         const radio = document.querySelector(`input[name="batteryType"][value="${state.batteryType}"]`);
                         if (radio) radio.checked = true;
-                    }
-                    // Restore autonomy days
-                    if (state.autonomyDays) {
-                        document.getElementById('autonomyDays').value = state.autonomyDays;
                     }
                     // Restore devices (replace the default blank row)
                     if (state.devices && state.devices.length > 0) {
@@ -627,7 +586,6 @@ button:hover {
             deviceInputs.addEventListener('input', saveState);
             deviceInputs.addEventListener('click', saveState);
             document.querySelectorAll('input[name="batteryType"]').forEach(r => r.addEventListener('change', saveState));
-            document.getElementById('autonomyDays').addEventListener('change', saveState);
             document.getElementById('addDevice').addEventListener('click', saveState);
             document.getElementById('addPreset').addEventListener('click', saveState);
 
