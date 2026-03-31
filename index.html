@@ -715,9 +715,12 @@
     </script>
     <script>
         // Auto-resize: notify parent iframe of height changes
-        const _ro = new ResizeObserver(() => {
+        function _sendHeight() {
             window.parent.postMessage({ type: 'iframe-resize', height: document.documentElement.scrollHeight }, '*');
-        });
+        }
+        // Fire on load and on any size change
+        window.addEventListener('load', _sendHeight);
+        const _ro = new ResizeObserver(_sendHeight);
         _ro.observe(document.body);
     </script>
 </body>
