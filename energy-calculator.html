@@ -30,6 +30,28 @@
             --radius-lg:    12px;
         }
 
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg:           #f4f1ec;
+                --surface:      #ffffff;
+                --surface-2:    #f7f4ef;
+                --surface-3:    #ede9e2;
+                --border:       #e2ddd5;
+                --border-hover: #c9c2b8;
+                --text:         #1c1a17;
+                --text-muted:   #6b6560;
+                --text-dim:     #b5aca0;
+                --amber:        #b45309;
+                --amber-light:  #d97706;
+                --amber-dim:    rgba(180,83,9,0.07);
+                --amber-glow:   rgba(180,83,9,0.14);
+                --green:        #047857;
+                --green-dim:    rgba(4,120,87,0.07);
+                --red:          #b91c1c;
+                --red-dim:      rgba(185,28,28,0.06);
+            }
+        }
+
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
@@ -90,6 +112,7 @@
             border-radius: var(--radius-lg);
             padding: 16px;
             margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
 
         /* ── Quick Add ────────────────────── */
@@ -320,6 +343,7 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
 
         /* coloured top rule on each card */
