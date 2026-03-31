@@ -171,10 +171,6 @@
         #addPreset:active { transform: translateY(0); }
 
         /* ── Device list ──────────────────── */
-        .devices-card {
-            margin-bottom: 10px;
-        }
-
         .device-input-header {
             display: flex;
             gap: 8px;
@@ -183,7 +179,6 @@
         }
 
         .device-input-header span {
-            flex: 1;
             font-family: 'Barlow Condensed', sans-serif;
             font-size: 0.62rem;
             font-weight: 700;
@@ -192,10 +187,10 @@
             color: var(--text-dim);
         }
 
-        .device-input-header span:last-child {
-            flex: none;
-            width: 36px;
-        }
+        /* Match header columns to actual input widths */
+        .device-input-header .col-name  { flex: 1; min-width: 0; }
+        .device-input-header .col-num   { flex: 0 0 70px; width: 70px; }
+        .device-input-header .col-remove { flex: none; width: 36px; }
 
         #deviceInputs {
             display: flex;
@@ -289,13 +284,18 @@
             background: var(--amber-dim);
         }
 
+        /* Breathing room between a card and the next section label */
+        .card + .section-label,
+        .results-container + .section-label {
+            margin-top: 16px;
+        }
+
         /* ── Battery Settings ─────────────── */
         .battery-settings {
             display: flex;
             align-items: center;
             gap: 14px;
             flex-wrap: wrap;
-            margin-bottom: 24px;
         }
 
         .battery-type-selector {
@@ -485,6 +485,8 @@
 
             .calc-header h1 { font-size: 1.9rem; }
 
+            .device-input-header { display: none; }
+
             .devices-card { padding: 10px; }
 
             #deviceInputs { gap: 6px; }
@@ -550,10 +552,10 @@
         <p class="section-label">Your Devices</p>
         <div class="card devices-card">
             <div class="device-input-header">
-                <span>Device</span>
-                <span>Watts</span>
-                <span>Hrs / Day</span>
-                <span></span>
+                <span class="col-name">Device</span>
+                <span class="col-num">Watts</span>
+                <span class="col-num">Hrs / Day</span>
+                <span class="col-remove"></span>
             </div>
             <div id="deviceInputs">
                 <div class="device-input">
