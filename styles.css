@@ -16,6 +16,7 @@
     --green-dim:    rgba(16,185,129,0.08);
     --red:          #f87171;
     --red-dim:      rgba(248,113,113,0.08);
+    --btn-text:     #100900;
     --radius:       7px;
     --radius-lg:    12px;
 }
@@ -39,6 +40,8 @@
         --green-dim:    rgba(4,120,87,0.07);
         --red:          #b91c1c;
         --red-dim:      rgba(185,28,28,0.06);
+        --btn-text:     #ffffff;
+        --text-dim:     #9a9086;
     }
 }
 
@@ -127,7 +130,7 @@ body { background: transparent; }
 
 #addPreset {
     background: var(--amber);
-    color: #100900;
+    color: var(--btn-text);
     border: none;
     padding: 10px 20px;
     border-radius: var(--radius);
@@ -285,7 +288,7 @@ body { background: transparent; }
 
 .toggle-group input[type="radio"]:checked + label.toggle-option {
     background: var(--amber);
-    color: #100900;
+    color: var(--btn-text);
     font-weight: 600;
 }
 
