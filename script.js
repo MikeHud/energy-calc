@@ -7,8 +7,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addDeviceBtn.addEventListener('click', addDeviceInput);
     deviceInputs.addEventListener('click', removeDevice);
-    // Add input event listener to deviceInputs
     deviceInputs.addEventListener('input', calculateTotalUsage);
+
+    document.querySelectorAll('input[name="batteryType"]').forEach(radio => {
+        radio.addEventListener('change', calculateTotalUsage);
+    });
+    document.getElementById('autonomyDays').addEventListener('change', calculateTotalUsage);
+
+    const presetSelect = document.getElementById('presetSelect');
+    document.getElementById('addPreset').addEventListener('click', () => {
+        const val = presetSelect.value;
+        if (!val) return;
+        const [name, watts] = val.split('|');
+        const newDevice = document.createElement('div');
+        newDevice.className = 'device-input';
+        newDevice.innerHTML = `
+            <input type="text" placeholder="Device name" class="device-name" value="${name}">
+            <input type="number" placeholder="Power (Watts)" class="device-power" value="${watts}">
+            <input type="number" placeholder="Hours per day" class="device-hours">
+            <button class="remove-device">X</button>
+        `;
+        deviceInputs.appendChild(newDevice);
+        presetSelect.value = '';
+        newDevice.querySelector('.device-hours').focus();
+        calculateTotalUsage();
+    });
 
     function addDeviceInput() {
         const newDevice = document.createElement('div');
@@ -55,10 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Calculate and display battery capacity recommendation
-        const recommendedBatteryCapacity = Math.ceil(ampHours * 3 * 2); // Assuming 50% depth of discharge
+        const batteryType = document.querySelector('input[name="batteryType"]:checked').value;
+        const dod = batteryType === 'lithium' ? 0.8 : 0.5;
+        const dodLabel = batteryType === 'lithium' ? '80%' : '50%';
+        const autonomyDays = parseInt(document.getElementById('autonomyDays').value);
+        const recommendedBatteryCapacity = Math.ceil(ampHours * autonomyDays / dod);
         batteryRecommendationDiv.querySelector('.result-box-content').innerHTML = `
             <div class="battery-capacity-result">${recommendedBatteryCapacity}Ah</div>
-            <span class="assumption">(Assuming 50% depth of discharge)</span>
+            <span class="assumption">(${autonomyDays} day${autonomyDays > 1 ? 's' : ''} autonomy · ${dodLabel} depth of discharge)</span>
         `;
 
         // Calculate and display solar panel recommendation
@@ -71,9 +98,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    // Initialize the display of results
-    calculateTotalUsage(); // Ensure this is called after adding event listeners
-
-    // Call this to initialize the display
-    calculateTotalUsage(); // Ensure results are displayed on load
+    calculateTotalUsage();
 });
