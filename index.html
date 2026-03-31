@@ -713,5 +713,12 @@
             calculateTotalUsage();
         });
     </script>
+    <script>
+        // Auto-resize: notify parent iframe of height changes
+        const _ro = new ResizeObserver(() => {
+            window.parent.postMessage({ type: 'iframe-resize', height: document.documentElement.scrollHeight }, '*');
+        });
+        _ro.observe(document.body);
+    </script>
 </body>
 </html>
