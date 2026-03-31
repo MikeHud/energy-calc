@@ -118,59 +118,30 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
 
-        /* ── Quick Add ────────────────────── */
-        .preset-row {
-            display: flex;
-            gap: 8px;
-        }
-
-        .preset-row select {
-            flex: 1;
-            appearance: none;
-            background: var(--surface-2);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7685' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 10px 36px 10px 12px;
-            border-radius: var(--radius);
-            font-family: 'Barlow', sans-serif;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: border-color 0.15s;
-        }
-
-        .preset-row select:focus {
-            outline: none;
-            border-color: var(--amber);
-        }
-
-        .preset-row select option {
-            background: var(--surface-2);
-            color: var(--text);
-        }
-
-        #addPreset {
-            background: var(--amber);
-            color: var(--btn-text);
-            border: none;
-            padding: 10px 20px;
-            border-radius: var(--radius);
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            white-space: nowrap;
-            flex-shrink: 0;
-            transition: background 0.15s, transform 0.1s;
-        }
-
-        #addPreset:hover  { background: var(--amber-light); transform: translateY(-1px); }
-        #addPreset:active { transform: translateY(0); }
-
         /* ── Device list ──────────────────── */
+        .section-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .section-row .section-label { margin-bottom: 0; }
+
+        #loadExample {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.78rem;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transition: color 0.15s;
+        }
+
+        #loadExample:hover { color: var(--amber); }
         .device-input-header {
             display: flex;
             gap: 8px;
@@ -497,8 +468,6 @@
             .results-container { grid-template-columns: 1fr; }
 
             .preset-row { flex-direction: column; }
-            #addPreset  { width: 100%; }
-
             .battery-settings { flex-direction: column; align-items: flex-start; }
 
             .battery-type-selector { flex-direction: column; align-items: flex-start; width: 100%; }
@@ -519,30 +488,10 @@
             <p>Add your devices to size your solar panels and battery bank for life on the road.</p>
         </header>
 
-        <p class="section-label">Quick Add Device</p>
-        <div class="card">
-            <div class="preset-row">
-                <select id="presetSelect">
-                    <option value="">— Select a common device —</option>
-                    <option value="12V Compressor Fridge|45">12V Compressor Fridge (45W)</option>
-                    <option value="LED Strip Lighting|20">LED Strip Lighting (20W)</option>
-                    <option value="Laptop|60">Laptop (60W)</option>
-                    <option value="Smartphone Charger|12">Smartphone Charger (12W)</option>
-                    <option value="Tablet Charger|18">Tablet Charger (18W)</option>
-                    <option value="12V Water Pump|60">12V Water Pump (60W)</option>
-                    <option value="Diesel Heater Fan|25">Diesel Heater Fan (25W)</option>
-                    <option value="Ceiling Fan|35">Ceiling Fan (35W)</option>
-                    <option value="TV / Monitor|40">TV / Monitor (40W)</option>
-                    <option value="CPAP Machine|30">CPAP Machine (30W)</option>
-                    <option value="Portable Speaker|10">Portable Speaker (10W)</option>
-                    <option value="USB Charger Hub|10">USB Charger Hub (10W)</option>
-                    <option value="Inverter (idle draw)|15">Inverter — idle draw (15W)</option>
-                </select>
-                <button id="addPreset">+ Add</button>
-            </div>
+        <div class="section-row">
+            <p class="section-label">Your Devices</p>
+            <button id="loadExample">Load example</button>
         </div>
-
-        <p class="section-label">Your Devices</p>
         <div class="card devices-card">
             <div class="device-input-header">
                 <span class="col-name">Device</span>
@@ -621,23 +570,28 @@
                 radio.addEventListener('change', calculateTotalUsage);
             });
 
-            const presetSelect = document.getElementById('presetSelect');
-            document.getElementById('addPreset').addEventListener('click', () => {
-                const val = presetSelect.value;
-                if (!val) return;
-                const [name, watts] = val.split('|');
-                const newDevice = document.createElement('div');
-                newDevice.className = 'device-input';
-                newDevice.innerHTML = `
-                    <input type="text" placeholder="Device name" class="device-name" value="${name}">
-                    <input type="number" placeholder="Watts" class="device-power" value="${watts}">
-                    <input type="number" placeholder="Hrs/day" class="device-hours">
-                    <button class="remove-device">×</button>
-                `;
-                deviceInputs.appendChild(newDevice);
-                presetSelect.value = '';
-                newDevice.querySelector('.device-hours').focus();
+            const exampleDevices = [
+                { name: 'LED Strip Lighting',    power: 20, hours: 5  },
+                { name: '12V Compressor Fridge', power: 45, hours: 24 },
+                { name: 'Laptop',                power: 60, hours: 4  },
+                { name: 'Smartphone Charger',    power: 12, hours: 2  },
+            ];
+
+            document.getElementById('loadExample').addEventListener('click', () => {
+                deviceInputs.innerHTML = '';
+                exampleDevices.forEach(d => {
+                    const row = document.createElement('div');
+                    row.className = 'device-input';
+                    row.innerHTML = `
+                        <input type="text" placeholder="Device name" class="device-name" value="${d.name}">
+                        <input type="number" placeholder="Watts" class="device-power" value="${d.power}">
+                        <input type="number" placeholder="Hrs/day" class="device-hours" value="${d.hours}">
+                        <button class="remove-device">×</button>
+                    `;
+                    deviceInputs.appendChild(row);
+                });
                 calculateTotalUsage();
+                saveState();
             });
 
             function addDeviceInput() {
@@ -772,7 +726,6 @@
             deviceInputs.addEventListener('click', saveState);
             document.querySelectorAll('input[name="batteryType"]').forEach(r => r.addEventListener('change', saveState));
             document.getElementById('addDevice').addEventListener('click', saveState);
-            document.getElementById('addPreset').addEventListener('click', saveState);
 
             loadState();
             calculateTotalUsage();
