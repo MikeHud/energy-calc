@@ -171,6 +171,32 @@
         #addPreset:active { transform: translateY(0); }
 
         /* ── Device list ──────────────────── */
+        .devices-card {
+            margin-bottom: 10px;
+        }
+
+        .device-input-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding: 0 2px;
+        }
+
+        .device-input-header span {
+            flex: 1;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        .device-input-header span:last-child {
+            flex: none;
+            width: 36px;
+        }
+
         #deviceInputs {
             display: flex;
             flex-direction: column;
@@ -179,16 +205,6 @@
         }
 
         .device-input {
-            background: var(--surface-2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 10px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .device-input-row {
             display: flex;
             gap: 8px;
             align-items: center;
@@ -196,10 +212,11 @@
 
         .device-input input {
             flex: 1;
-            background: var(--surface);
+            width: 0;
+            background: var(--surface-2);
             border: 1px solid var(--border);
             color: var(--text);
-            padding: 8px 11px;
+            padding: 9px 11px;
             border-radius: var(--radius);
             font-family: 'Barlow', sans-serif;
             font-size: 0.875rem;
@@ -217,24 +234,9 @@
         .device-input input[type="number"]::-webkit-inner-spin-button,
         .device-input input[type="number"]::-webkit-outer-spin-button { opacity: 0.25; }
 
-        .device-input .device-name {
-            font-weight: 500;
-        }
-
-        .device-meta {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 0.6rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            width: 50%;
-            padding: 0 2px;
-        }
-
         .remove-device {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             flex-shrink: 0;
             background: transparent;
             border: 1px solid var(--border);
@@ -244,10 +246,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
+            font-size: 1.1rem;
             line-height: 1;
-            font-family: sans-serif;
             transition: background 0.15s, border-color 0.15s, color 0.15s;
+            font-family: sans-serif;
         }
 
         .remove-device:hover {
@@ -471,6 +473,20 @@
 
             .calc-header h1 { font-size: 1.9rem; }
 
+            .device-input-header { display: none; }
+
+            .device-input { flex-wrap: wrap; }
+
+            .device-input .device-name {
+                flex: 100%;
+                width: 100%;
+            }
+
+            .device-input .device-power,
+            .device-input .device-hours { flex: 1; }
+
+            .remove-device { flex-shrink: 0; }
+
             .results-container { grid-template-columns: 1fr; }
 
             .preset-row { flex-direction: column; }
@@ -516,16 +532,18 @@
 
         <p class="section-label">Your Devices</p>
         <div class="card devices-card">
+            <div class="device-input-header">
+                <span>Device</span>
+                <span>Watts</span>
+                <span>Hrs / Day</span>
+                <span></span>
+            </div>
             <div id="deviceInputs">
                 <div class="device-input">
-                    <div class="device-input-row">
-                        <input type="text" placeholder="Device name" class="device-name">
-                        <button class="remove-device">×</button>
-                    </div>
-                    <div class="device-input-row">
-                        <input type="number" placeholder="Watts" class="device-power">
-                        <input type="number" placeholder="Hrs / day" class="device-hours">
-                    </div>
+                    <input type="text" placeholder="Device name" class="device-name">
+                    <input type="number" placeholder="Watts" class="device-power">
+                    <input type="number" placeholder="Hrs/day" class="device-hours">
+                    <button class="remove-device">×</button>
                 </div>
             </div>
             <button id="addDevice">+ Add Device</button>
@@ -599,14 +617,10 @@
                 const newDevice = document.createElement('div');
                 newDevice.className = 'device-input';
                 newDevice.innerHTML = `
-                    <div class="device-input-row">
-                        <input type="text" placeholder="Device name" class="device-name" value="${name}">
-                        <button class="remove-device">×</button>
-                    </div>
-                    <div class="device-input-row">
-                        <input type="number" placeholder="Watts" class="device-power" value="${watts}">
-                        <input type="number" placeholder="Hrs / day" class="device-hours">
-                    </div>
+                    <input type="text" placeholder="Device name" class="device-name" value="${name}">
+                    <input type="number" placeholder="Watts" class="device-power" value="${watts}">
+                    <input type="number" placeholder="Hrs/day" class="device-hours">
+                    <button class="remove-device">×</button>
                 `;
                 deviceInputs.appendChild(newDevice);
                 presetSelect.value = '';
@@ -618,14 +632,10 @@
                 const newDevice = document.createElement('div');
                 newDevice.className = 'device-input';
                 newDevice.innerHTML = `
-                    <div class="device-input-row">
-                        <input type="text" placeholder="Device name" class="device-name">
-                        <button class="remove-device">×</button>
-                    </div>
-                    <div class="device-input-row">
-                        <input type="number" placeholder="Watts" class="device-power">
-                        <input type="number" placeholder="Hrs / day" class="device-hours">
-                    </div>
+                    <input type="text" placeholder="Device name" class="device-name">
+                    <input type="number" placeholder="Watts" class="device-power">
+                    <input type="number" placeholder="Hrs/day" class="device-hours">
+                    <button class="remove-device">×</button>
                 `;
                 deviceInputs.appendChild(newDevice);
                 calculateTotalUsage();
@@ -734,14 +744,10 @@
                             const row = document.createElement('div');
                             row.className = 'device-input';
                             row.innerHTML = `
-                                <div class="device-input-row">
-                                    <input type="text" placeholder="Device name" class="device-name" value="${d.name}">
-                                    <button class="remove-device">×</button>
-                                </div>
-                                <div class="device-input-row">
-                                    <input type="number" placeholder="Watts" class="device-power" value="${d.power}">
-                                    <input type="number" placeholder="Hrs / day" class="device-hours" value="${d.hours}">
-                                </div>
+                                <input type="text" placeholder="Device name" class="device-name" value="${d.name}">
+                                <input type="number" placeholder="Watts" class="device-power" value="${d.power}">
+                                <input type="number" placeholder="Hrs/day" class="device-hours" value="${d.hours}">
+                                <button class="remove-device">×</button>
                             `;
                             deviceInputs.appendChild(row);
                         });
