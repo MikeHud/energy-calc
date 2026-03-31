@@ -211,8 +211,6 @@
         }
 
         .device-input input {
-            flex: 1;
-            width: 0;
             background: var(--surface-2);
             border: 1px solid var(--border);
             color: var(--text);
@@ -221,6 +219,17 @@
             font-family: 'Barlow', sans-serif;
             font-size: 0.875rem;
             transition: border-color 0.15s, background 0.15s;
+        }
+
+        .device-input .device-name {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .device-input .device-power,
+        .device-input .device-hours {
+            flex: 0 0 88px;
+            width: 88px;
         }
 
         .device-input input:focus {
@@ -472,20 +481,6 @@
             .container { padding: 20px 14px 32px; }
 
             .calc-header h1 { font-size: 1.9rem; }
-
-            .device-input-header { display: none; }
-
-            .device-input { flex-wrap: wrap; }
-
-            .device-input .device-name {
-                flex: 100%;
-                width: 100%;
-            }
-
-            .device-input .device-power,
-            .device-input .device-hours { flex: 1; }
-
-            .remove-device { flex-shrink: 0; }
 
             .results-container { grid-template-columns: 1fr; }
 
