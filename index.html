@@ -430,6 +430,14 @@
             text-align: center;
         }
 
+        .copyright a {
+            color: var(--text-dim);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .copyright a:hover { color: var(--amber); }
+
         /* ── Mobile ───────────────────────── */
         @media (max-width: 600px) {
             .container { padding: 20px 14px 32px; }
@@ -524,7 +532,7 @@
             </div>
         </div>
 
-        <p class="copyright">&copy; <script>document.write(new Date().getFullYear());</script> Mike Hudson VandogTraveller.com. All rights reserved.</p>
+        <p class="copyright">&copy; <script>document.write(new Date().getFullYear());</script> Mike Hudson · <a href="https://www.vandogtraveller.com" target="_blank" rel="noopener">VandogTraveller.com</a>. All rights reserved.</p>
 
     </div>
 
